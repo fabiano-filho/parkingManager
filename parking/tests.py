@@ -58,3 +58,46 @@ class EstacionamentoTestCase(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("Placa inválida", response.data["error"])
+
+    def test_acesso_sem_autenticacao(self):
+        """
+        Testa o acesso negado a um endpoint protegido sem autenticação.
+        """
+        # Remove o token de autenticação
+        self.client.credentials()
+        response = self.client.post(
+            "/api/entrada/", {"placa": "GHI8901"}, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_registrar_saida_veiculo_sem_pagamento(self):
+        """
+        Testa o registro de saída sem pagamento.
+        """
+        response = self.client.post("/api/saida/", {"placa": "ABC1234"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(
+            "Pagamento não realizado!",
+            response.data["error"],
+        )
+
+    def test_registrar_saida_veiculo_com_tolerancia(self):
+        """
+        Testa o registro de saída dentro do tempo de tolerância após pagamento.
+        """
+        response = self.client.post("/api/saida/", {"placa": "XYZ1D23"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("Saída registrada com sucesso", response.data["message"])
+
+    def test_registrar_saida_veiculo_fora_tolerancia(self):
+        """
+        Testa o registro de saída fora do tempo de tolerância após pagamento.
+        """
+        self.veiculo_pago.data_pagamento = now() - timedelta(
+            minutes=settings.TOLERANCIA_TEMPO_SAIDA + 1
+        )
+        self.veiculo_pago.save()
+
+        response = self.client.post("/api/saida/", {"placa": "XYZ1D23"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn("Tempo de tolerância excedido", response.data["error"])
