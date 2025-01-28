@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # third-party apps,
     "rest_framework",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     # my apps
     "parking",
 ]
@@ -137,6 +138,14 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Documentação da API ParkingManager",
+    "DESCRIPTION": "API para gerenciamento de veículos em um estacionamento.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 # set environment variables

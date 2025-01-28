@@ -1,20 +1,15 @@
+from .docs import *
+from .functions import *
+from .models import Veiculo
 from rest_framework import status
+from django.utils.timezone import now
+from .serializers import VeiculoSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.utils.timezone import now
-from .functions import (
-    calcular_valor_a_pagar,
-    registrar_pagamento,
-    validar_placa,
-    verificar_tolerancia,
-)
-from .models import Veiculo
-from .serializers import VeiculoSerializer
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
+@registrar_entrada_docs
 @api_view(["POST"])
 def registrar_entrada(request):
     placa = request.data.get("placa")
@@ -39,6 +34,7 @@ def registrar_entrada(request):
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+@registrar_saida_docs
 @api_view(["POST"])
 def registrar_saida(request):
     placa = request.data.get("placa")
@@ -74,6 +70,7 @@ def registrar_saida(request):
     )
 
 
+@consultar_valor_docs
 @api_view(["GET"])
 def consultar_valor(request):
     placa = request.query_params.get("placa")
@@ -91,6 +88,7 @@ def consultar_valor(request):
     return Response({"valor": valor}, status=status.HTTP_200_OK)
 
 
+@registrar_pagamento_docs
 @api_view(["POST"])
 def registrar_pagamento_view(request):
     placa = request.data.get("placa")
@@ -104,6 +102,7 @@ def registrar_pagamento_view(request):
     )
 
 
+@relatorio_docs
 @api_view(["GET"])
 def relatorio(request):
     veiculos = Veiculo.objects.all()
