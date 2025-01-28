@@ -105,3 +105,12 @@ def registrar_pagamento_view(request):
         {"message": "Pagamento realizado com sucesso", "valor_pago": valor},
         status=status.HTTP_200_OK,
     )
+
+
+@api_view(["GET"])
+@authentication_classes([JWTAuthentication])  # Define a autenticação JWT
+@permission_classes([IsAuthenticated])
+def relatorio(request):
+    veiculos = Veiculo.objects.all()
+    serializer = VeiculoSerializer(veiculos, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
