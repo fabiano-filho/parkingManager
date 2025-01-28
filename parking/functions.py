@@ -1,4 +1,6 @@
 import re
+from django.conf import settings
+from django.utils.timezone import now, timedelta
 
 
 def validar_placa(placa):
@@ -11,3 +13,11 @@ def validar_placa(placa):
     if not re.match(padrao_antigo, placa) and not re.match(padrao_mercosul, placa):
         return False
     return True
+
+
+def verificar_tolerancia(data_pagamento):
+    """
+    Verifica se o tempo de tolerância após o pagamento foi excedido.
+    """
+    tolerancia = timedelta(minutes=settings.TOLERANCIA_TEMPO_SAIDA)
+    return now() - data_pagamento > tolerancia

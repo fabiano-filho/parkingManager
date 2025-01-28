@@ -6,7 +6,7 @@ from rest_framework.decorators import (
     permission_classes,
 )
 from django.utils.timezone import now
-from .functions import validar_placa
+from .functions import validar_placa, verificar_tolerancia
 from .models import Veiculo
 from .serializers import VeiculoSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -38,3 +38,35 @@ def registrar_entrada(request):
 
     serializer = VeiculoSerializer(veiculo)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(["POST"])
+@authentication_classes([JWTAuthentication])  # Define a autenticação JWT
+@permission_classes([IsAuthenticated])
+def registrar_saida(request):
+    placa = request.data.get("placa")
+    veiculo = Veiculo.objects.filter(placa=placa).first()
+    if not veiculo:
+        return Response(
+            {"error": "Veículo não encontrado"}, status=status.HTTP_404_NOT_FOUND
+        )
+
+    if not veiculo.pago:
+        return Response(
+            {
+                "error": "Pagamento não realizado! Efetue o pagamento para liberar o veículo."
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if verificar_tolerancia(veiculo.data_pagamento):
+        return Response(
+            {"error": "Tempo de tolerância excedido. Efetue o pagamento novamente."},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+
+    veiculo.data_saida = now()
+    veiculo.save()
+    return Response(
+        {"message": "Saída registrada com sucesso"}, status=status.HTTP_200_OK
+    )
