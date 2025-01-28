@@ -50,13 +50,16 @@ def registrar_entrada(request):
 @permission_classes([IsAuthenticated])
 def registrar_saida(request):
     placa = request.data.get("placa")
+    pago = request.data.get("pago")
     veiculo = Veiculo.objects.filter(placa=placa).first()
     if not veiculo:
         return Response(
             {"error": "Veículo não encontrado"}, status=status.HTTP_404_NOT_FOUND
         )
 
-    if not veiculo.pago:
+    print(veiculo.pago)
+    print(pago)
+    if not veiculo.pago and (veiculo.pago != pago):
         return Response(
             {
                 "error": "Pagamento não realizado! Efetue o pagamento para liberar o veículo."

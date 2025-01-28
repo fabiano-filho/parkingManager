@@ -20,6 +20,8 @@ def verificar_tolerancia(data_pagamento):
     """
     Verifica se o tempo de tolerância após o pagamento foi excedido.
     """
+    if not data_pagamento:
+        return False
     tolerancia = timedelta(minutes=settings.TOLERANCIA_TEMPO_SAIDA)
     return now() - data_pagamento > tolerancia
 
