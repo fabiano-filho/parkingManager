@@ -56,9 +56,11 @@ def registrar_saida(request):
         return Response(
             {"error": "Veículo não encontrado"}, status=status.HTTP_404_NOT_FOUND
         )
-
-    print(veiculo.pago)
-    print(pago)
+    if veiculo.data_saida:
+        return Response(
+            {"error": "Este veículo não se encontra mais no estacionamento."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     if not veiculo.pago and (veiculo.pago != pago):
         return Response(
             {

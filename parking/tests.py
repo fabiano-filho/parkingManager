@@ -85,7 +85,9 @@ class EstacionamentoTestCase(TestCase):
         """
         Testa o registro de saída dentro do tempo de tolerância após pagamento.
         """
-        response = self.client.post("/api/saida/", {"placa": "XYZ1D23"}, format="json")
+        response = self.client.post(
+            "/api/saida/", {"placa": "XYZ1D23", "pago": True}, format="json"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("Saída registrada com sucesso", response.data["message"])
 
