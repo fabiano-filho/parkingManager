@@ -76,6 +76,7 @@ TOLERANCIA_TEMPO_SAIDA=10
 ```
 
 Essas variáveis configuram o valor por hora do estacionamento e o tempo de tolerância após o pagamento, respectivamente.
+Obs.: por padrão, o sistema irá considerar os valores 5.0 e 10, respectivamente.
 
 ### **5. Configurar o Banco de Dados**
 
