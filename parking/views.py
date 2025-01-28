@@ -61,7 +61,7 @@ def registrar_saida(request):
             {"error": "Este veículo não se encontra mais no estacionamento."},
             status=status.HTTP_404_NOT_FOUND,
         )
-    if not veiculo.pago and not bool(pago):
+    if not veiculo.pago and (veiculo.pago != bool(pago) or not bool(pago)):
         return Response(
             {
                 "error": "Pagamento não realizado! Efetue o pagamento para liberar o veículo."
