@@ -20,8 +20,6 @@ from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 @api_view(["POST"])
-@authentication_classes([JWTAuthentication])  # Define a autenticação JWT
-@permission_classes([IsAuthenticated])
 def registrar_entrada(request):
     placa = request.data.get("placa")
     if not placa:
@@ -46,8 +44,6 @@ def registrar_entrada(request):
 
 
 @api_view(["POST"])
-@authentication_classes([JWTAuthentication])  # Define a autenticação JWT
-@permission_classes([IsAuthenticated])
 def registrar_saida(request):
     placa = request.data.get("placa")
     pago = request.data.get("pago")
@@ -83,8 +79,6 @@ def registrar_saida(request):
 
 
 @api_view(["GET"])
-@authentication_classes([JWTAuthentication])  # Define a autenticação JWT
-@permission_classes([IsAuthenticated])
 def consultar_valor(request):
     placa = request.query_params.get("placa")
     if not placa:
@@ -102,8 +96,6 @@ def consultar_valor(request):
 
 
 @api_view(["POST"])
-@authentication_classes([JWTAuthentication])  # Define a autenticação JWT
-@permission_classes([IsAuthenticated])
 def registrar_pagamento_view(request):
     placa = request.data.get("placa")
     error, valor = registrar_pagamento(placa)
@@ -117,8 +109,6 @@ def registrar_pagamento_view(request):
 
 
 @api_view(["GET"])
-@authentication_classes([JWTAuthentication])  # Define a autenticação JWT
-@permission_classes([IsAuthenticated])
 def relatorio(request):
     veiculos = Veiculo.objects.all()
     if not veiculos.exists():
