@@ -21,3 +21,14 @@ def verificar_tolerancia(data_pagamento):
     """
     tolerancia = timedelta(minutes=settings.TOLERANCIA_TEMPO_SAIDA)
     return now() - data_pagamento > tolerancia
+
+
+def calcular_valor_a_pagar(veiculo):
+    """
+    Calcula o valor a pagar para um veículo com base no tempo de permanência.
+    """
+    diferenca = now() - veiculo.data_entrada
+    horas = (diferenca.total_seconds() // 3600) + (
+        1 if diferenca.total_seconds() % 3600 else 0
+    )
+    return horas * settings.ESTACIONAMENTO_VALOR_HORA

@@ -6,7 +6,7 @@ from rest_framework.decorators import (
     permission_classes,
 )
 from django.utils.timezone import now
-from .functions import validar_placa, verificar_tolerancia
+from .functions import calcular_valor_a_pagar, validar_placa, verificar_tolerancia
 from .models import Veiculo
 from .serializers import VeiculoSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -70,3 +70,18 @@ def registrar_saida(request):
     return Response(
         {"message": "Saída registrada com sucesso"}, status=status.HTTP_200_OK
     )
+
+
+@api_view(["GET"])
+@authentication_classes([JWTAuthentication])  # Define a autenticação JWT
+@permission_classes([IsAuthenticated])
+def consultar_valor(request):
+    placa = request.query_params.get("placa")
+    veiculo = Veiculo.objects.filter(placa=placa).first()
+    if not veiculo:
+        return Response(
+            {"error": "Veículo não encontrado"}, status=status.HTTP_404_NOT_FOUND
+        )
+
+    valor = calcular_valor_a_pagar(veiculo)
+    return Response({"valor": valor}, status=status.HTTP_200_OK)
