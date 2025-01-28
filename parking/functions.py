@@ -1,4 +1,5 @@
 import re
+from .models import Veiculo
 from django.conf import settings
 from django.utils.timezone import now, timedelta
 
@@ -32,3 +33,19 @@ def calcular_valor_a_pagar(veiculo):
         1 if diferenca.total_seconds() % 3600 else 0
     )
     return horas * settings.ESTACIONAMENTO_VALOR_HORA
+
+
+def registrar_pagamento(placa):
+    """
+    Registra o pagamento de um veículo e calcula o valor devido.
+    """
+    veiculo = Veiculo.objects.filter(placa=placa).first()
+    if not veiculo:
+        return {"error": "Veículo não encontrado"}, None
+
+    valor = calcular_valor_a_pagar(veiculo)
+    veiculo.valor_pago = valor
+    veiculo.pago = True
+    veiculo.data_pagamento = now()
+    veiculo.save()
+    return None, valor
