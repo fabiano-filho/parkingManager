@@ -6,11 +6,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("parking.urls"), name="parking.urls"),
     path(
-        "api/login",
+        "api/login/",
         TokenObtainPairView.as_view(),
     ),
     path(
-        "api/token/refresh",
+        "api/token/refresh/",
         TokenObtainPairView.as_view(),
     ),
 ]

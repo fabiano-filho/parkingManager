@@ -44,7 +44,7 @@ class EstacionamentoTestCase(TestCase):
         Testa o registro de entrada de um veículo.
         """
         response = self.client.post(
-            "/api/veiculos/entrada/", {"placa": "DEF5678"}, format="json"
+            "/api/entrada/", {"placa": "DEF5678"}, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["placa"], "DEF5678")
@@ -54,7 +54,7 @@ class EstacionamentoTestCase(TestCase):
         Testa o registro de entrada com placa inválida.
         """
         response = self.client.post(
-            "/api/veiculos/entrada/", {"placa": "1234567"}, format="json"
+            "/api/entrada/", {"placa": "1234567"}, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("Placa inválida", response.data["error"])
