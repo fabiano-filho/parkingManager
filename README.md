@@ -9,6 +9,14 @@ O **ParkingManager** é uma API REST desenvolvida para gerenciar um sistema de e
 -   **SQLite**: Banco de dados utilizado para armazenamento dos dados.
 -   **JWT (JSON Web Token)**: Para autenticação segura dos endpoints protegidos.
 -   **drf-spectacular**: Ferramenta para geração de documentação interativa no formato OpenAPI.
+  
+<div style="display: inline_block; background-color: white"><br>
+  <img align="center" alt="Python" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" />
+  <img align="center" alt="Git" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" />
+  <img style="background: white" align="center" alt="Django" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" />         
+  <img style="background: white" align="center" alt="DRF" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/djangorest/djangorest-original.svg" /> 
+  <img style="background: white" align="center" alt="SQLite" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sqlite/sqlite-original.svg" /> 
+</div>
 
 ---
 
