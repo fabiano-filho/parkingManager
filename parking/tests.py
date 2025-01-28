@@ -101,3 +101,21 @@ class EstacionamentoTestCase(TestCase):
         response = self.client.post("/api/saida/", {"placa": "XYZ1D23"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertIn("Tempo de tolerância excedido", response.data["error"])
+
+    def test_consultar_valor_a_pagar(self):
+        """
+        Testa a consulta do valor a pagar para um veículo.
+        """
+        response = self.client.get("/api/valor/?placa=ABC1234", format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("valor", response.data)
+
+    def test_registrar_pagamento(self):
+        """
+        Testa o registro de pagamento de um veículo.
+        """
+        response = self.client.post("/api/pagar/", {"placa": "ABC1234"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("valor_pago", response.data)
+        veiculo = Veiculo.objects.get(placa="ABC1234")
+        self.assertTrue(veiculo.pago)
