@@ -8,7 +8,7 @@ from .serializers import VeiculoSerializer
 
 
 # Create your views here.
-@api_view(["GET"])
+@api_view(["POST"])
 def registrar_entrada(request):
     placa = request.data.get("placa")
     if not placa:
