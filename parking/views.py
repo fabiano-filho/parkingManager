@@ -61,7 +61,7 @@ def registrar_saida(request):
             {"error": "Este veículo não se encontra mais no estacionamento."},
             status=status.HTTP_404_NOT_FOUND,
         )
-    if not veiculo.pago and (veiculo.pago != pago):
+    if not veiculo.pago and not bool(pago):
         return Response(
             {
                 "error": "Pagamento não realizado! Efetue o pagamento para liberar o veículo."
@@ -87,6 +87,10 @@ def registrar_saida(request):
 @permission_classes([IsAuthenticated])
 def consultar_valor(request):
     placa = request.query_params.get("placa")
+    if not placa:
+        return Response(
+            {"error": "Placa não informada"}, status=status.HTTP_400_BAD_REQUEST
+        )
     veiculo = Veiculo.objects.filter(placa=placa).first()
     if not veiculo:
         return Response(
