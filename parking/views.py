@@ -121,5 +121,10 @@ def registrar_pagamento_view(request):
 @permission_classes([IsAuthenticated])
 def relatorio(request):
     veiculos = Veiculo.objects.all()
+    if not veiculos.exists():
+        return Response(
+            {"message": "Nenhum registro encontrado no sistema"},
+            status=status.HTTP_200_OK,
+        )
     serializer = VeiculoSerializer(veiculos, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
