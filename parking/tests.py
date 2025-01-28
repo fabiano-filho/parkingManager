@@ -121,3 +121,16 @@ class EstacionamentoTestCase(TestCase):
         self.assertIn("valor_pago", response.data)
         veiculo = Veiculo.objects.get(placa="ABC1234")
         self.assertTrue(veiculo.pago)
+
+    def test_relatorio_entrada_saida(self):
+        """
+        Testa o relatório de entrada e saída de veículos.
+        """
+        response = self.client.get("/api/relatorio/", format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(
+            len(response.data), 2
+        )  # Deve conter ao menos 2 registros
+        for registro in response.data:
+            self.assertIn("data_entrada", registro)
+            self.assertIn("placa", registro)
